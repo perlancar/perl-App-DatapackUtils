@@ -20,4 +20,6 @@ L<Module::DataPack>:
 
 L<Module::DataPack>
 
+L<App::DataSectionSeekableUtils>
+
 =cut
