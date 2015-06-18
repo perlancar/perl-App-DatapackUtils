@@ -1,5 +1,12 @@
 Revision history for App-DataPackUtils
 
+0.02    2015-06-18 (PERLANCAR)
+
+	- No functional changes.
+
+	- [doc] Mention App::DataSectionSeekableUtils.
+
+
 0.01    2015-06-17 (PERLANCAR)
 
         - First release.
