@@ -1,5 +1,10 @@
 Revision history for App-DataPackUtils
 
+0.03    2016-02-06 (PERLANCAR)
+
+	- Add script: dump-datapack-script.
+
+
 0.02    2015-06-18 (PERLANCAR)
 
 	- No functional changes.
