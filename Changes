@@ -1,5 +1,11 @@
 Revision history for App-DataPackUtils
 
+0.04    2016-02-06 (PERLANCAR)
+
+	- Replace dump-datapack-script with datapack-info, so the interface is
+          consistent with fatpack-info.
+
+
 0.03    2016-02-06 (PERLANCAR)
 
 	- Add script: dump-datapack-script.
