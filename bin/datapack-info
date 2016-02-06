@@ -1,0 +1,125 @@
+#!perl
+
+# DATE
+# VERSION
+
+use 5.010;
+use strict;
+use warnings;
+
+use ExtUtils::MakeMaker;
+use Perinci::CmdLine::Any;
+
+our %SPEC;
+$SPEC{datapack_info} = {
+    v => 1.1,
+    summary => 'Given a datapacked script, show various info',
+    args => {
+        script => {
+            schema => 'str*',
+            'x.schema.entity' => 'filename',
+            req => 1,
+            pos => 0,
+            completion => sub {
+                require Complete::Program;
+
+                my %args = @_;
+                my $word = $args{word};
+
+                Complete::Program::complete_program(word => $word);
+            },
+        },
+        list_modules => {
+            schema => ['bool' => is=>1],
+            cmdline_aliases => {l=>{}},
+            tags => ['category:action'],
+        },
+        show_module_version => {
+            schema => ['bool' => is=>1],
+            cmdline_aliases => {V=>{}},
+        },
+    },
+    args_rels => {
+        dep_all => [show_module_version => ['list_modules']],
+    },
+};
+sub datapack_info {
+    require File::Which;
+
+    my %args = @_;
+
+    my $script = $args{script};
+    unless (-f $script) {
+        $script = File::Which::which($script);
+        return [400, "No such script '$script'"] unless $script;
+    }
+    open my($fh), "<", $script
+        or return [500, "Can't open script '$script': $!"];
+
+    my $found;
+    while (<$fh>) {
+        chomp;
+        do {$found++; last} if /\A__DATA__\z/;
+    }
+    return [412, "No __DATA__ found in script"] unless $found;
+
+    require Data::Section::Seekable::Reader;
+    my $reader = Data::Section::Seekable::Reader->new(handle=>$fh);
+
+    my @parts;
+    my $temp_filename;
+    my %modules;
+    for my $part ($reader->parts) {
+        my $ct0 = $reader->read_part($part);
+        my $ct = $ct0; $ct =~ s/^#//gm;
+        $modules{$part} = {};
+        if ($args{show_module_version}) {
+            require File::Slurper;
+            require File::Temp;
+            unless ($temp_filename) {
+                (undef, $temp_filename) = File::Temp::tempfile();
+            }
+            File::Slurper::write_text($temp_filename, $ct);
+            $modules{$part}{version} = MM->parse_version($temp_filename);
+        }
+        push @parts, {
+            name => $part,
+            length => length($ct),
+        };
+    }
+
+    my $res;
+    if ($args{list_modules}) {
+        $res = [];
+        for my $k (sort keys %modules) {
+            my $mod = $k; $mod =~ s/\.pm$//; $mod =~ s!/!::!g;
+            if ($args{show_module_version}) {
+                push @$res, "$mod\t" . $modules{$k}{version};
+            } else {
+                push @$res, $mod;
+            }
+        }
+    } else {
+        $res = {
+            file_size => (-s $script),
+            parts => \@parts,
+        };
+    };
+
+    [200, "OK", $res];
+}
+
+Perinci::CmdLine::Any->new(
+    url => '/main/datapack_info',
+)->run;
+
+# ABSTRACT:
+# PODNAME:
+
+=head1 SYNOPSIS
+
+ % fatpack-info /tmp/script.fatpack
+
+ % fatpack-info -lV `which fatpacked-script`
+
+=cut
