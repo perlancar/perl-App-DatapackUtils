@@ -44,15 +44,15 @@ $SPEC{datapack_info} = {
     },
     examples => [
         {
-            summary => 'Show total size of script and fatpack contents',
-            src => 'fatpack-info /tmp/script.fatpack',
+            summary => 'Show total size of script and datapack contents',
+            src => 'datapack-info /tmp/script.packed',
             src_plang => 'bash',
             test => 0,
             'x.doc.show_result' => 0,
         },
         {
-            summary => 'Show list of fatpacked modules (-l) along with their versions (-V)',
-            src => 'fatpack-info -lV `which fatpacked-script`',
+            summary => 'Show list of datapacked modules (-l) along with their versions (-V)',
+            src => 'datapack-info -lV `which datapacked-script`',
             src_plang => 'bash',
         },
     ],
