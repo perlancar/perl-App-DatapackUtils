@@ -54,6 +54,8 @@ $SPEC{datapack_info} = {
             summary => 'Show list of datapacked modules (-l) along with their versions (-V)',
             src => 'datapack-info -lV `which datapacked-script`',
             src_plang => 'bash',
+            test => 0,
+            'x.doc.show_result' => 0,
         },
     ],
 };
