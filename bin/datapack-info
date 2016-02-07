@@ -42,6 +42,20 @@ $SPEC{datapack_info} = {
     args_rels => {
         dep_all => [show_module_version => ['list_modules']],
     },
+    examples => [
+        {
+            summary => 'Show total size of script and fatpack contents',
+            src => 'fatpack-info /tmp/script.fatpack',
+            src_plang => 'bash',
+            test => 0,
+            'x.doc.show_result' => 0,
+        },
+        {
+            summary => 'Show list of fatpacked modules (-l) along with their versions (-V)',
+            src => 'fatpack-info -lV `which fatpacked-script`',
+            src_plang => 'bash',
+        },
+    ],
 };
 sub datapack_info {
     require File::Which;
@@ -115,11 +129,3 @@ Perinci::CmdLine::Any->new(
 
 # ABSTRACT:
 # PODNAME:
-
-=head1 SYNOPSIS
-
- % fatpack-info /tmp/script.fatpack
-
- % fatpack-info -lV `which fatpacked-script`
-
-=cut
