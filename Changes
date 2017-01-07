@@ -1,5 +1,3 @@
-Revision history for App-DataPackUtils
-
 0.04    2016-02-06 (PERLANCAR)
 
 	- Replace dump-datapack-script with datapack-info, so the interface is
