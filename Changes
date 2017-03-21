@@ -1,3 +1,10 @@
+0.05    2017-03-21 (PERLANCAR)
+
+        - [build] Rebuild to remove unneeded dependency on Perl::osnames.
+
+        - Tweak examples.
+
+
 0.04    2016-02-06 (PERLANCAR)
 
 	- Replace dump-datapack-script with datapack-info, so the interface is
